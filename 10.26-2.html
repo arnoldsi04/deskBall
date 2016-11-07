@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>尝试写台球</title>
+	<link rel="stylesheet" href="css/reset.css">
+	<style>
+		.namebord {
+			overflow: hidden;
+			width: 800px;
+			height: 100px;
+			display: flex;
+			justify-content: space-around;
+		}
+		.player1,.player2{
+			height: 100px;
+			margin: 0 50px;
+			float: left;
+		}
+		.player2 {
+			float: right;
+		}
+		p {
+			text-align: center;
+			font-size: 30px;
+			float: left;
+		}
+		#p1score,#p2score {
+			color: blue;
+		}
+		.state {
+			text-align: center;
+			font-size: 30px;
+		}
+	</style>
+</head>
+<body>
+	<div id="container">
+		<canvas width="800" height="544"></canvas>
+		<div class="namebord">
+			<div class="player1">
+				<p contenteditable="true">PLAYER1：</p>
+				<p id="p1score">0</p>
+			</div>
+			<div class="state">现在是P1时间</div>
+			<div class="player2">
+				<p contenteditable="true">PLAYER2：</p>
+				<p id="p2score">0</p>
+			</div>
+		</div>
+	</div>
+
+</body>
+<script src="js/jjjjj.js"></script>
+<script>
+	var imgArr = ["img/table.jpg","img/bg_controler.png","img/bule_dot.png","img/dashed_ball.png","img/force_conver.png","img/white_ball.png","img/yellow_ball.png"];
+	var imgArrLoadEnd = [];
+	var loadNum = 0;
+	var canvas = document.querySelector("canvas");
+	var ctx = canvas.getContext("2d");
+	var playerBall = null;
+	var tipsLine = null;
+	var imgbg = null;
+	var bluedot = null;
+	var dashedBall = null;
+	var force = null;
+	var table = null;
+	var whiteBall = null;
+	var yellowBall = null;
+	var timer = null;
+	var ballArr = [];
+	var dotArr = [];
+	var ballAllArr = [];
+	var crashClear = [];
+	var strengh = null;
+	var str_timer = null;
+	var scoreBalls = [];
+	var canDrowTips = true;
+	//**********************
+	//地板摩擦力与最大小球力度
+	var moca = 0.05;
+	var speed = 0.1;
+	//**********************
+	var p1 = document.querySelector("#p1score");
+	var p2 = document.querySelector("#p2score");
+	var state = document.querySelector(".state");
+	var score1 = 0;
+	var score2 = 0;
+	var ballIn = [];
+	var nowstate = false;
+	var hasbeenchange = false;
+	
+	preLoading(function(){
+		createBall();
+		createThite();
+		createTipline();
+		makeAllBall();
+		createContr();
+		createCoreBall();
+		console.log(ballAllArr);
+		console.log(crashClear);
+		console.log(scoreBalls);
+		timer = setInterval(animate,10);
+	});
+
+	function animate(){
+		ctx.clearRect(0, 0, 800, 544);
+		ctx.drawImage(table, 0, 0,800,544);
+		jugeCraAll();
+		drawBall();
+		drawPlayer();
+		judgeCanDrowTip();
+		drawTipline();
+		drawControl();
+		getScore();
+	}
+</script>
+</html>
